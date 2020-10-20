@@ -9,7 +9,7 @@
         <cp>/opt/target/win-distro/*.jar</cp>
     </classPath>
     <jre>
-        <path>/opt/jdk8u265-b01-jre</path>
+        <path>/opt/jre64</path>
     </jre>
     <versionInfo>
         <fileVersion>4.1.0.0</fileVersion>
