@@ -11,7 +11,7 @@ mkdir -p ${BUILD_DIR}
 mkdir -p ${DIST_DIR}
 mkdir -p ${DIST_DIR}/bin
 
-cd ${BUILD_DIR} && wget https://repo1.maven.org/maven2/com/hazelcast/hazelcast/${HAZELCAST_VERSION}/hazelcast-${HAZELCAST_VERSION}.jar
+cd ${BUILD_DIR} && wget -q https://repo1.maven.org/maven2/com/hazelcast/hazelcast/${HAZELCAST_VERSION}/hazelcast-${HAZELCAST_VERSION}.jar
 
 cp /opt/resources/commons-daemon/amd64/prunsrv.exe ${DIST_DIR}/bin/
 cp /opt/resources/logging.properties ${DIST_DIR}/bin/
@@ -20,11 +20,11 @@ echo "Creating windows launcher (EXE)"
 
 echo ${HAZELCAST_VERSION_WINDOWS}
 # build member exe
-/opt/launch4j/launch4j /opt/config/Launch4j-member.xml
+cd ${BUILD_DIR} && /opt/launch4j/launch4j /opt/config/Launch4j-member.xml
 cp /opt/resources/launch4j-template.l4j.ini "${DIST_DIR}/bin/Hazelcast.l4j.ini"
 
 # build client exe
-/opt/launch4j/launch4j /opt/config/Launch4j-client.xml
+cd ${BUILD_DIR} && /opt/launch4j/launch4j /opt/config/Launch4j-client.xml
 cp /opt/resources/launch4j-template.l4j.ini "${DIST_DIR}/bin/HazelcastClient.l4j.ini"
 
 echo "Creating a Windows installer"

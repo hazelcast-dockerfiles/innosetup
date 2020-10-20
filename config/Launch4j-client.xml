@@ -1,7 +1,7 @@
 <launch4jConfig>
     <headerType>console</headerType>
     <outfile>/opt/target/win-distro/hazelcast-4.1-BETA-1/bin/HazelcastClient.exe</outfile>
-    <jar>/opt/target/win-distro/hazelcast-4.1-BETA-1.jar</jar>
+    <jar>hazelcast-4.1-BETA-1.jar</jar>
     <dontWrapJar>true</dontWrapJar>
     <icon>/opt/resources/console-app.ico</icon>
     <classPath>
