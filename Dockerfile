@@ -23,7 +23,7 @@ RUN apt-get update \
     && unzip /tmp/commons-daemon.zip -d /opt/resources/commons-daemon \
     && echo "Downloading Windows JREs" \
     && set -e \
-    && wget -q -O /tmp/jre64.zip "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u265-b01/OpenJDK8U-jre_x64_windows_hotspot_8u265b01.zip" \
+    && wget -q -O /tmp/jre64.zip "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.8%2B10/OpenJDK11U-jre_x64_windows_hotspot_11.0.8_10.zip" \
     && unzip -d /opt /tmp/jre64.zip \
     && mv /opt/jdk8* /opt/jre64 \
     && rm /tmp/jre64.zip \
