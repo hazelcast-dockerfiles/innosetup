@@ -33,7 +33,12 @@ RUN apt-get update \
     && echo "Installing Launch4j" \
     && curl -s -SL https://sourceforge.net/projects/launch4j/files/launch4j-3/3.12/launch4j-3.12-linux-x64.tgz | tar xzf - -C /opt \
     && echo alias launch4j=/opt/launch4j/launch4j >> /root/.bashrc \
+    && echo "Installing Apache Ant" \
+    && curl -s -SL https://downloads.apache.org/ant/binaries/apache-ant-1.10.9-bin.tar.gz | tar xzf - -C /opt \
+    && mv /opt/apache-ant* /opt/ant \
     && echo "Installing Inno Setup binaries" \
     && wget -q -O is.exe "http://files.jrsoftware.org/is/6/innosetup-6.0.5.exe" \
     && wine-x11-run wine is.exe /SP- /VERYSILENT /ALLUSERS /SUPPRESSMSGBOXES \
     && rm -rf is.exe /tmp/commons-daemon.zip /var/lib/apt/lists/*
+
+CMD ["/usr/bin/hazelcast-install"]

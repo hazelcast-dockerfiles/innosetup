@@ -2,12 +2,19 @@
 
 set -e -x
 
+
 SRCPATH=$1
 ZIP=$(dirname "$(readlink -e "$SRCPATH")")
 DIRNAME=$(dirname "$(readlink -e "$SRCPATH")")
 DIR=$(cd "$DIRNAME" || exit 112; pwd)
 
+export PATH=$PATH:/opt/launch4j:/opt/ant/bin
+
 BUILDDIR=/opt/build
+
+if [ -d ${BUILDDIR} ]; then
+  rm -rf ${BUILDDIR}
+fi
 
 mkdir -p ${BUILDDIR}
 unzip -q "${SRCPATH}" -d ${BUILDDIR}
@@ -23,6 +30,7 @@ while [ $(echo $WINVERSION |tr '.' '\n'|wc -l) -lt 4 ]; do
   WINVERSION="${WINVERSION}.0"
 done
 
+echo "WINVERSION=${WINVERSION}"
 
 TARGET=/opt/build/hazelcast
 mv "/opt/build/${DISTNAME}" ${TARGET}
@@ -31,6 +39,9 @@ cd /opt/resources
 cp service-starter.jar ${TARGET}/lib
 cp logging.properties commons-daemon/amd64/prunsrv.exe ${TARGET}/bin
 cp -r /opt/jre64 ${TARGET}/jre
+
+# Use Launch4j as the ant task because if used directly it fails to expand variables properly
+ant -f /opt/resources/ant-build-create-launchers.xml "-Dhazelcast.version=${VERSION}"  "-Dhazelcast.winversion=${WINVERSION}"
 
 isscdistdir=$(winepath -w "${TARGET}")
 isscoutputdir=$(winepath -w "${DIR}")

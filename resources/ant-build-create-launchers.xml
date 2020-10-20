@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Hazelcast" default="launcher" basedir=".">
+
+    <description>Builds Hazelcast Launch4J wrappers</description>
+    <property name="launch4j.dir" value="/opt/launch4j" />
+    <property name="dist.dir" value="/opt/build/hazelcast" />
+    <property name="res.dir" value="/opt/resources" />
+
+    <target name="launcher">
+        <echo message="Creating windows launcher (EXE)" />
+
+        <taskdef name="launch4j"
+            classname="net.sf.launch4j.ant.Launch4jTask"
+            classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
+
+        <launch4j>
+            <!--
+            convert /tmp/hazelcast-logo-bug_sm.png -define icon:auto-resize="256,128,96,64,48,32,16" src/main/resources/hazelcast.ico
+            -->
+            <config headerType="console"
+                outfile="${dist.dir}/bin/Hazelcast.exe"
+                dontWrapJar="true"
+                icon="${res.dir}/hazelcast.ico">
+                <classPath mainClass="com.hazelcast.core.server.HazelcastMemberStarter">
+                    <cp>../lib/*.jar</cp>
+                </classPath>
+                <jre path="../jre" />
+                <versionInfo fileVersion="${hazelcast.winversion}" txtFileVersion="Hazelcast IMDG v. ${hazelcast.version}" 
+                    fileDescription="Launcher for Hazelcast member"
+                    copyright="Hazelcast"
+                    productVersion="${hazelcast.winversion}"
+                    txtProductVersion="Runs Hazelcast IMDG Member"
+                    productName="Hazelcast IMDG"
+                    internalName="Hazelcast IMDG"
+                    originalFilename="Hazelcast.exe" />
+            </config>
+        </launch4j>
+        <copy file="${res.dir}/launch4j-template.l4j.ini" tofile="${dist.dir}/bin/Hazelcast.l4j.ini" />
+
+        <launch4j>
+            <config headerType="console"
+                outfile="${dist.dir}/bin/HazelcastClient.exe"
+                dontWrapJar="true"
+                icon="${res.dir}/console-app.ico">
+                <classPath mainClass="com.hazelcast.client.console.ClientConsoleApp">
+                    <cp>../lib/*.jar</cp>
+                </classPath>
+                <jre path="../jre" />
+                <versionInfo fileVersion="${hazelcast.winversion}" txtFileVersion="Hazelcast IMDG v. ${hazelcast.version}" 
+                    fileDescription="Launcher for Hazelcast demo client"
+                    copyright="Hazelcast"
+                    productVersion="${hazelcast.winversion}"
+                    txtProductVersion="Runs Hazelcast IMDG demo client"
+                    productName="Hazelcast IMDG demo client"
+                    internalName="Hazelcast IMDG demo client"
+                    originalFilename="HazelcastClient.exe" />
+            </config>
+        </launch4j>
+        <copy file="${res.dir}/launch4j-template.l4j.ini" tofile="${dist.dir}/bin/HazelcastClient.l4j.ini" />
+    </target>
+</project>

@@ -23,17 +23,21 @@ ArchitecturesAllowed=x64
 ArchitecturesInstallIn64BitMode=x64
 UninstallDisplayIcon={app}\bin\Hazelcast.exe
 
+[Components]
+Name: "main"; Description: "Hazelcast Files"; Types: full custom compact; Flags: fixed
+Name: "service"; Description: "Windows Service"; Types: full;
+
 [Icons]
-;Name: "{group}\Hazelcast {#MyAppVersion}"; Filename: "{app}\bin\Hazelcast.exe"
-;Name: "{group}\Hazelcast Client Demo"; Filename: "{app}\bin\HazelcastClient.exe"
+Name: "{group}\Hazelcast {#MyAppVersion}"; Filename: "{app}\bin\Hazelcast.exe"
+Name: "{group}\Hazelcast Client Demo"; Filename: "{app}\bin\HazelcastClient.exe"
 Name: "{group}\Uninstall {#MyAppName}"; Filename: "{uninstallexe}"
 
 [Run]
-Filename: "{app}\bin\prunsrv.exe"; Parameters: "install Hazelcast --DisplayName=""Hazelcast In-Memory Data Grid"" --Jvm=""{app}\jre\bin\server\jvm.dll"" --Startup=manual --Classpath=""{app}\lib\*"" --StartMode=jvm --StartClass=com.hazelcast.core.server.HazelcastServiceStarter --StartMethod=start --StopMode=jvm --StopClass=com.hazelcast.core.server.HazelcastServiceStarter --StopMethod=stop --LogPath=""{app}\logs"" --LogPrefix=service --StdOutput=../logs/hazelcast-out.log --StdError=../logs/hazelcast-err.log --JvmOptions9=""-Djava.util.logging.config.file={app}\bin\logging.properties"""
+Filename: "{app}\bin\prunsrv.exe"; Parameters: "install Hazelcast --DisplayName=""Hazelcast In-Memory Data Grid"" --Jvm=""{app}\jre\bin\server\jvm.dll"" --Startup=manual --Classpath=""{app}\lib\*"" --StartMode=jvm --StartClass=com.hazelcast.core.server.HazelcastServiceStarter --StartMethod=start --StopMode=jvm --StopClass=com.hazelcast.core.server.HazelcastServiceStarter --StopMethod=stop --LogPath=""{app}\logs"" --LogPrefix=service --StdOutput=../logs/hazelcast-out.log --StdError=../logs/hazelcast-err.log --JvmOptions9=""-Djava.util.logging.config.file={app}\bin\logging.properties"""; Components: service
 
 [UninstallRun]
-Filename: "{app}\bin\prunsrv.exe"; Parameters: "stop Hazelcast"
-Filename: "{app}\bin\prunsrv.exe"; Parameters: "delete Hazelcast"
+Filename: "{app}\bin\prunsrv.exe"; Parameters: "stop Hazelcast"; Components: service
+Filename: "{app}\bin\prunsrv.exe"; Parameters: "delete Hazelcast"; Components: service
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\logs"
@@ -56,4 +60,45 @@ begin
         + ExpandConstant('{app}') + '\bin\logging.properties"' #13#10, True);
     end;
   end;
+end;
+
+//********** Check if application is already installed
+function MyAppInstalled: Boolean;
+begin
+  Result := RegKeyExists(HKEY_LOCAL_MACHINE,
+	'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{#MyAppID}_is1');
+end;
+
+//********** If app already installed, uninstall it before setup.
+function InitializeSetup(): Boolean;
+var
+  uninstaller: String;
+  oldVersion: String;
+  ErrorCode: Integer;
+begin
+  if not MyAppInstalled then begin
+    Result := True;
+    Exit;
+  end;
+  RegQueryStringValue(HKEY_LOCAL_MACHINE,
+	'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{#MyAppID}_is1',
+	'DisplayName', oldVersion);
+  if (MsgBox(oldVersion + ' is already installed, it has to be uninstalled before installation. Continue?',
+	  mbConfirmation, MB_YESNO) = IDNO) then begin
+	Result := False;
+	Exit;
+  end;
+
+  RegQueryStringValue(HKEY_LOCAL_MACHINE,
+	'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{#MyAppID}_is1',
+	'QuietUninstallString', uninstaller);
+  Exec('>', uninstaller, '', SW_SHOW, ewWaitUntilTerminated, ErrorCode);
+  if (ErrorCode <> 0) then begin
+	MsgBox('Failed to uninstall previous version. . Please run {#MyAppName} uninstaller manually from Start menu or Control Panel and then run installer again.',
+	 mbError, MB_OK );
+	Result := False;
+	Exit;
+  end;
+
+  Result := True;
 end;
