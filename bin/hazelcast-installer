@@ -2,6 +2,10 @@
 
 set -e -x
 
+if [ $# -lt 1 ]; then
+  echo "Path to Hazelcast ZIP has to be provided" >&2
+  exit 2;
+fi
 
 SRCPATH=$1
 ZIP=$(dirname "$(readlink -e "$SRCPATH")")
@@ -19,13 +23,13 @@ fi
 mkdir -p ${BUILDDIR}
 unzip -q "${SRCPATH}" -d ${BUILDDIR}
 if [ ! -d /opt/build/hazelcast-* ]; then
-  echo "The zip $1 doesn't contain hazelcast distribution"
+  echo "The zip $1 doesn't contain hazelcast distribution" >&2
   exit 3;
 fi
 
 DISTNAME=$(basename /opt/build/hazelcast-*)
 VERSION=$(echo $DISTNAME | sed s/hazelcast-[a-zA-Z\-]*//)
-WINVERSION=$(echo $VERSION | sed s/\([0-9\.]+\).*/\1/)
+WINVERSION=$(echo $VERSION | sed 's/\([0-9\.]*\).*/\1/')
 while [ $(echo $WINVERSION |tr '.' '\n'|wc -l) -lt 4 ]; do
   WINVERSION="${WINVERSION}.0"
 done
