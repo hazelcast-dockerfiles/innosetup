@@ -1,22 +1,22 @@
 <launch4jConfig>
     <headerType>console</headerType>
-    <outfile>%DIST_DIR%/bin/HazelcastClient.exe</outfile>
-    <jar>%DIST_DIR%/lib/hazelcast-%HAZELCAST_VERSION%.jar</jar>
+    <outfile>/opt/target/win-distro/hazelcast-4.1-BETA-1/bin/HazelcastClient.exe</outfile>
+    <jar>/opt/target/win-distro/hazelcast-4.1-BETA-1.jar</jar>
     <dontWrapJar>true</dontWrapJar>
     <icon>/opt/resources/console-app.ico</icon>
     <classPath>
         <mainClass>com.hazelcast.client.console.ClientConsoleApp</mainClass>
-        <cp>%DIST_DIR%/lib/*.jar</cp>
+        <cp>/opt/target/win-distro/*.jar</cp>
     </classPath>
     <jre>
         <path>/opt/jdk8u265-b01-jre</path>
     </jre>
     <versionInfo>
-        <fileVersion>%HAZELCAST_VERSION_WINDOWS%</fileVersion>
-        <txtFileVersion>Hazelcast IMDG v. %HAZELCAST_VERSION%</txtFileVersion>
+        <fileVersion>4.1.0.0</fileVersion>
+        <txtFileVersion>Hazelcast IMDG v. 4.1-BETA-1</txtFileVersion>
         <fileDescription>Launcher for Hazelcast member</fileDescription>
         <copyright>Hazelcast</copyright>
-        <productVersion>%HAZELCAST_VERSION_WINDOWS%</productVersion>
+        <productVersion>4.1.0.0</productVersion>
         <txtProductVersion>Runs Hazelcast IMDG Member</txtProductVersion>
         <productName>Hazelcast IMDG</productName>
         <companyName>Hazelcast</companyName>
