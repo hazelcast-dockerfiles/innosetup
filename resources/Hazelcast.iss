@@ -33,7 +33,7 @@ Name: "{group}\Hazelcast Client Demo"; Filename: "{app}\bin\HazelcastClient.exe"
 Name: "{group}\Uninstall {#MyAppName}"; Filename: "{uninstallexe}"
 
 [Run]
-Filename: "{app}\bin\prunsrv.exe"; Parameters: "install Hazelcast --DisplayName=""Hazelcast In-Memory Data Grid"" --Jvm=""{app}\jre\bin\server\jvm.dll"" --Startup=manual --Classpath=""{app}\lib\*"" --StartMode=jvm --StartClass=com.hazelcast.core.server.HazelcastServiceStarter --StartMethod=start --StopMode=jvm --StopClass=com.hazelcast.core.server.HazelcastServiceStarter --StopMethod=stop --LogPath=""{app}\logs"" --LogPrefix=service --StdOutput=../logs/hazelcast-out.log --StdError=../logs/hazelcast-err.log --JvmOptions9=""-Djava.util.logging.config.file={app}\bin\logging.properties"""; Components: service
+Filename: "{app}\bin\prunsrv.exe"; Parameters: "install Hazelcast --DisplayName=""Hazelcast In-Memory Data Grid"" --Jvm=""{app}\jre\bin\server\jvm.dll"" --Startup=auto --Classpath=""{app}\lib\*"" --StartMode=jvm --StartClass=com.hazelcast.core.server.HazelcastServiceStarter --StartMethod=start --StopMode=jvm --StopClass=com.hazelcast.core.server.HazelcastServiceStarter --StopMethod=stop --LogPath=""{app}\logs"" --LogPrefix=service --StdOutput=../logs/hazelcast-out.log --StdError=../logs/hazelcast-err.log --JvmOptions9=""-Djava.util.logging.config.file={app}\bin\logging.properties"""; Components: service
 
 [UninstallRun]
 Filename: "{app}\bin\prunsrv.exe"; Parameters: "stop Hazelcast"; Components: service
