@@ -37,4 +37,4 @@ RUN apt-get update \
     && wine-x11-run wine is.exe /SP- /VERYSILENT /ALLUSERS /SUPPRESSMSGBOXES \
     && rm -rf is.exe /tmp/commons-daemon.zip /var/lib/apt/lists/* \
 
-CMD ["build"]
+CMD ["/usr/bin/build"]

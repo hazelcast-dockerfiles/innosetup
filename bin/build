@@ -9,28 +9,30 @@ DIST_DIR=${BUILD_DIR}/${APP_DIR}
 echo "Preparing directory structure for the build"
 mkdir -p ${BUILD_DIR}
 mkdir -p ${DIST_DIR}
+mkdir -p ${DIST_DIR}/bin
 
 cd ${BUILD_DIR} && wget https://repo1.maven.org/maven2/com/hazelcast/hazelcast/${HAZELCAST_VERSION}/hazelcast-${HAZELCAST_VERSION}.jar
 
-cp /opt/resources/commons-daemon/amd64/prunsrv.exe ${DIST_DIR}/bin
-cp /opt/resources/logging.properties ${DIST_DIR}/bin
+cp /opt/resources/commons-daemon/amd64/prunsrv.exe ${DIST_DIR}/bin/
+cp /opt/resources/logging.properties ${DIST_DIR}/bin/
 
 echo "Creating windows launcher (EXE)"
 
+echo ${HAZELCAST_VERSION_WINDOWS}
 # build member exe
-launch4j /opt/config/Launch4j-member.xml
+/opt/launch4j/launch4j /opt/config/Launch4j-member.xml
 cp /opt/resources/launch4j-template.l4j.ini "${DIST_DIR}/bin/Hazelcast.l4j.ini"
 
 # build client exe
-launch4j /opt/config/Launch4j-client.xml
+/opt/launch4j/launch4j /opt/config/Launch4j-client.xml
 cp /opt/resources/launch4j-template.l4j.ini "${DIST_DIR}/bin/HazelcastClient.l4j.ini"
 
 echo "Creating a Windows installer"
-iscc /DMyAppName=Hazelcast \
+cd ${DEST_DIR} && iscc /DMyAppName=Hazelcast \
      /DMyAppVersion=${HAZELCAST_VERSION} \
      /DMyAppVersionWin=${HAZELCAST_VERSION_WINDOWS} \
      /DMyAppId=Hazelcast \
-     /DDistDir=${DIST_DIR} \
-     /DOutputDir=/opt/out \
+     /DDistDir=. \
+     /DOutputDir=\\opt\\out \
      /opt/config/Hazelcast.iss
 
