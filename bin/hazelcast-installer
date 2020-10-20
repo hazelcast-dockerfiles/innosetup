@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e -x
+
+ZIP=$(dirname "$(readlink -e "$1")")
+DIRNAME=$(dirname "$(readlink -e "$1")")
+DIR=$(cd "$DIRNAME" || exit 112; pwd)
+
+mkdir /opt/build
+unzip -q "${ZIP}" -d /opt/build
+if [ ! -d /opt/build/hazelcast-* ]; then
+  echo "The zip $1 doesn't contain hazelcast distribution"
+  exit 3;
+fi
+
+DISTNAME=$(basename /opt/build/hazelcast-*)
+VERSION=$(echo $DISTNAME | sed s/hazelcast-[a-zA-Z\-]*//)
+mv "/opt/build/${DISTNAME}" /opt/build/hazelcast

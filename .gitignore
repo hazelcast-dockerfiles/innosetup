@@ -7,3 +7,8 @@
 # no wix binary files
 *.wixobj
 *.wixpdb
+
+target/
+.classpath
+.project
+.settings

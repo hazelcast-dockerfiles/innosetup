@@ -1,3 +1,9 @@
+FROM maven:3.6.3-openjdk-8-slim as maven
+
+COPY service-starter /opt/service-starter
+
+RUN mvn -f /opt/service-starter clean install
+
 FROM ubuntu:20.04
 
 ENV WINEDEBUG=-all,err+all \
@@ -5,6 +11,7 @@ ENV WINEDEBUG=-all,err+all \
 
 COPY bin/* /usr/bin/
 COPY resources /opt/resources
+COPY --from=maven /opt/service-starter/target/service-starter.jar /opt/resources/
 
 RUN apt-get update \
     && apt-get install -y curl wget unzip procps xvfb openjdk-8-jre-headless \
