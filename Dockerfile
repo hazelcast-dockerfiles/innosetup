@@ -23,12 +23,10 @@ RUN apt-get update \
     && unzip /tmp/commons-daemon.zip -d /opt/resources/commons-daemon \
     && echo "Downloading Windows JREs" \
     && set -e \
-    && for xbits in 32 64; do \
-         wget -q -O /tmp/jre${xbits}.zip "https://api.adoptopenjdk.net/v2/binary/releases/openjdk8?openjdk_impl=hotspot&os=windows&arch=x${xbits}&release=latest&type=jre"; \
-         unzip -d /opt /tmp/jre${xbits}.zip; \
-         mv /opt/jdk8* /opt/jre${xbits}; \
-         rm /tmp/jre${xbits}.zip; \
-       done \
+    && wget -q -O /tmp/jre64.zip "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u265-b01/OpenJDK8U-jre_x64_windows_hotspot_8u265b01.zip" \
+    && unzip -d /opt /tmp/jre64.zip \
+    && mv /opt/jdk8* /opt/jre64 \
+    && rm /tmp/jre64.zip \
     && set +e \
     && echo "Installing Launch4j" \
     && curl -s -SL https://sourceforge.net/projects/launch4j/files/launch4j-3/3.12/launch4j-3.12-linux-x64.tgz | tar xzf - -C /opt \
