@@ -2,12 +2,15 @@
 
 set -e -x
 
-ZIP=$(dirname "$(readlink -e "$1")")
-DIRNAME=$(dirname "$(readlink -e "$1")")
+SRCPATH=$1
+ZIP=$(dirname "$(readlink -e "$SRCPATH")")
+DIRNAME=$(dirname "$(readlink -e "$SRCPATH")")
 DIR=$(cd "$DIRNAME" || exit 112; pwd)
 
-mkdir /opt/build
-unzip -q "${ZIP}" -d /opt/build
+BUILDDIR=/opt/build
+
+mkdir -p ${BUILDDIR}
+unzip -q "${SRCPATH}" -d ${BUILDDIR}
 if [ ! -d /opt/build/hazelcast-* ]; then
   echo "The zip $1 doesn't contain hazelcast distribution"
   exit 3;
@@ -15,4 +18,24 @@ fi
 
 DISTNAME=$(basename /opt/build/hazelcast-*)
 VERSION=$(echo $DISTNAME | sed s/hazelcast-[a-zA-Z\-]*//)
-mv "/opt/build/${DISTNAME}" /opt/build/hazelcast
+WINVERSION=$(echo $VERSION | sed s/\([0-9\.]+\).*/\1/)
+while [ $(echo $WINVERSION |tr '.' '\n'|wc -l) -lt 4 ]; do
+  WINVERSION="${WINVERSION}.0"
+done
+
+
+TARGET=/opt/build/hazelcast
+mv "/opt/build/${DISTNAME}" ${TARGET}
+
+cd /opt/resources
+cp service-starter.jar ${TARGET}/lib
+cp logging.properties commons-daemon/amd64/prunsrv.exe ${TARGET}/bin
+cp -r /opt/jre64 ${TARGET}/jre
+
+isscdistdir=$(winepath -w "${TARGET}")
+isscoutputdir=$(winepath -w "${DIR}")
+scriptpath=$(winepath -w "/opt/resources/Hazelcast.iss")
+iscc /O+ "/DDistDir=${isccdistdir}" "/DOutputDir=${isccoutputdir}" \
+  /DMyAppName=Hazelcast /DMyAppVersion=${VERSION} /DMyAppVersionWin=${WINVERSION} \
+  /DMyAppId=Hazelcast "/DDistDir=${isscdistdir}" "/DOutputDir=${isscoutputdir}" \
+  "${scriptpath}"
