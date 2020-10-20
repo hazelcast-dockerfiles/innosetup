@@ -1,9 +1,15 @@
 FROM ubuntu:20.04
 
+ARG HAZELCAST_VERSION_BASE=4.1
+ARG HAZELCAST_VERSION_SUFFIX=-BETA-1
+
 ENV WINEDEBUG=-all,err+all \
-    DISPLAY=:99
+    DISPLAY=:99 \
+    HAZELCAST_VERSION_BASE=${HAZELCAST_VERSION_BASE} \
+    HAZELCAST_VERSION_SUFFIX=${HAZELCAST_VERSION_SUFFIX}
 
 COPY bin/* /usr/bin/
+COPY config/* /opt/config/
 COPY resources /opt/resources
 
 RUN apt-get update \
@@ -29,4 +35,6 @@ RUN apt-get update \
     && echo "Installing Inno Setup binaries" \
     && curl -SL "http://files.jrsoftware.org/is/6/innosetup-6.0.5.exe" -o is.exe \
     && wine-x11-run wine is.exe /SP- /VERYSILENT /ALLUSERS /SUPPRESSMSGBOXES \
-    && rm -rf is.exe /tmp/commons-daemon.zip /var/lib/apt/lists/*
+    && rm -rf is.exe /tmp/commons-daemon.zip /var/lib/apt/lists/* \
+
+CMD ["build"]

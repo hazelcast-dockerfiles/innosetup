@@ -1,0 +1,22 @@
+<launch4jConfig>
+    <headerType>console</headerType>
+    <outfile>%DIST_DIR%/bin/Hazelcast.exe</outfile>
+    <jar>%DIST_DIR%/lib/hazelcast-%HAZELCAST_VERSION%.jar</jar>
+    <dontWrapJar>true</dontWrapJar>
+    <icon>/opt/resources/hazelcast.ico</icon>
+    <jre>
+        <path>/opt/jdk8u265-b01-jre</path>
+    </jre>
+    <versionInfo>
+        <fileVersion>%HAZELCAST_VERSION_WINDOWS%</fileVersion>
+        <txtFileVersion>Hazelcast IMDG v. %HAZELCAST_VERSION%</txtFileVersion>
+        <fileDescription>Launcher for Hazelcast member</fileDescription>
+        <copyright>Hazelcast</copyright>
+        <productVersion>%HAZELCAST_VERSION_WINDOWS%</productVersion>
+        <txtProductVersion>Runs Hazelcast IMDG Member</txtProductVersion>
+        <productName>Hazelcast IMDG</productName>
+        <companyName>Hazelcast</companyName>
+        <internalName>Hazelcast IMDG</internalName>
+        <originalFilename>Hazelcast.exe</originalFilename>
+    </versionInfo>
+</launch4jConfig>
