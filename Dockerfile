@@ -1,8 +1,7 @@
 FROM ubuntu:20.04
 
-# get at least error information from wine
-ENV WINEDEBUG -all,err+all \
-    DISPLAY :99
+ENV WINEDEBUG=-all,err+all \
+    DISPLAY=:99
 
 COPY bin/* /usr/bin/
 
