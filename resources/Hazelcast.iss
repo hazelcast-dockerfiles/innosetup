@@ -67,7 +67,7 @@ end;
 function MyAppInstalled: Boolean;
 begin
   Result := RegKeyExists(HKEY_LOCAL_MACHINE,
-	'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{#MyAppID}_is1');
+        'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{#MyAppID}_is1');
 end;
 
 //********** If app already installed, uninstall it before setup.
@@ -82,23 +82,23 @@ begin
     Exit;
   end;
   RegQueryStringValue(HKEY_LOCAL_MACHINE,
-	'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{#MyAppID}_is1',
-	'DisplayName', oldVersion);
+        'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{#MyAppID}_is1',
+        'DisplayName', oldVersion);
   if (MsgBox(oldVersion + ' is already installed, it has to be uninstalled before installation. Continue?',
-	  mbConfirmation, MB_YESNO) = IDNO) then begin
-	Result := False;
-	Exit;
+          mbConfirmation, MB_YESNO) = IDNO) then begin
+        Result := False;
+        Exit;
   end;
 
   RegQueryStringValue(HKEY_LOCAL_MACHINE,
-	'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{#MyAppID}_is1',
-	'QuietUninstallString', uninstaller);
+        'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{#MyAppID}_is1',
+        'QuietUninstallString', uninstaller);
   Exec('>', uninstaller, '', SW_SHOW, ewWaitUntilTerminated, ErrorCode);
   if (ErrorCode <> 0) then begin
-	MsgBox('Failed to uninstall previous version. . Please run {#MyAppName} uninstaller manually from Start menu or Control Panel and then run installer again.',
-	 mbError, MB_OK );
-	Result := False;
-	Exit;
+        MsgBox('Failed to uninstall previous version. . Please run {#MyAppName} uninstaller manually from Start menu or Control Panel and then run installer again.',
+         mbError, MB_OK );
+        Result := False;
+        Exit;
   end;
 
   Result := True;

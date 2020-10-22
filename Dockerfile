@@ -14,7 +14,7 @@ COPY resources /opt/resources
 COPY --from=maven /opt/service-starter/target/service-starter.jar /opt/resources/
 
 RUN apt-get update \
-    && apt-get install -y curl wget unzip procps xvfb openjdk-8-jre-headless \
+    && apt-get install -y curl wget unzip procps xvfb openjdk-8-jre-headless osslsigncode \
     && dpkg --add-architecture i386 \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y -o APT::Immediate-Configure=false wine wine32 \
@@ -38,5 +38,3 @@ RUN apt-get update \
     && wget -q -O is.exe "http://files.jrsoftware.org/is/6/innosetup-6.0.5.exe" \
     && wine-x11-run wine is.exe /SP- /VERYSILENT /ALLUSERS /SUPPRESSMSGBOXES \
     && rm -rf is.exe /tmp/commons-daemon.zip /var/lib/apt/lists/*
-
-CMD ["/usr/bin/hazelcast-install"]
