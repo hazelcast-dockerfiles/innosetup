@@ -19,7 +19,7 @@ You can use it to sign the `Hazelcast_setup` executables:
 
 ```bash
 # sign the installer
-docker run --rm -v `pwd`:/mnt kwart/innosetup-hazelcast \
+docker run --rm -v `pwd`:/mnt devopshazelcast/innosetup \
   osslsigncode sign \
     -n "Hazelcast IMDG" -i http://hazelcast.org/ \
     -certs /mnt/hazelcast.crt -key /mnt/hazelcast.key \
